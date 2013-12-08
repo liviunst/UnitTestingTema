@@ -23,13 +23,16 @@ namespace InversionOfControlExampleTest
             var personInitMock = new Mock<IPersonInitialization>();
             var person = new Persoana()
             {
-                Nume = "Nume Mock",
-                Prenume = "Prenume Mock",
+                Nume = "NumeMock",
+                Prenume = "PrenumeMock",
                 Varsta = 22
             };
 
+            List<Persoana> lista = new List<Persoana>();
+
             //setare pe mock
             personInitMock.Setup(s => s.CreatePerson()).Returns(person);
+            sursaDeDateMock.Setup(s => s.ReadAll()).Returns(lista);
 
             DispecerA A = new DispecerA(sursaDeDateMock.Object, personInitMock.Object);
 
@@ -134,18 +137,20 @@ namespace InversionOfControlExampleTest
             //setare pe Mock
             personInitMock.Setup(s => s.CreatePerson()).Returns(new Persoana()
             {
-                Nume = "Nume Mock",
-                Prenume = "Prenume Mock",
+                Nume = "NumeMock",
+                Prenume = "PrenumeMock",
                 Varsta = 23
             });
 
+            List<Persoana> lista = new List<Persoana>();
+            sursaDeDateMock.Setup(s => s.ReadAll()).Returns(lista);
+
             //act
-            A.Add();
             A.Add();
 
             //assert
-            sursaDeDateMock.Verify(v => v.Add(It.IsAny<Persoana>()), Times.Exactly(2));
-            personInitMock.Verify(v => v.CreatePerson(), Times.Exactly(2));
+            sursaDeDateMock.Verify(v => v.Add(It.IsAny<Persoana>()), Times.Exactly(1));
+            personInitMock.Verify(v => v.CreatePerson(), Times.Exactly(1));
 
         }
 
