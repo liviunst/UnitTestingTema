@@ -34,7 +34,15 @@ namespace InversionOfControlExample
 
             if (String.IsNullOrEmpty(person.Nume) || String.IsNullOrEmpty(person.Prenume))
             {
-                throw new Exception("Numele sau prenumele este null sau empty!");
+                throw new Exception("Numele sau prenumele este null sau empty !");
+            }
+
+            foreach (var persoane in sursaDeDate.ReadAll())
+            {
+                if (persoane.CompareTo(person) == 1)
+                {
+                    throw new Exception("Persoana deja exista in SursaDeDate !");
+                }
             }
 
             sursaDeDate.Add(person);

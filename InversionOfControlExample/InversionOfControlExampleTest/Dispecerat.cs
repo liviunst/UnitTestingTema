@@ -40,7 +40,6 @@ namespace InversionOfControlExampleTest
             sursaDeDateMock.Verify(v => v.Add(person), Times.Exactly(1));
         }
 
-
         //Tema se apeleaza ReadByName by Mock
 
         [TestMethod]
