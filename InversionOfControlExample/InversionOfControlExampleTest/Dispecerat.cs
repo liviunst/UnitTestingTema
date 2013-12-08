@@ -12,6 +12,35 @@ namespace InversionOfControlExampleTest
     [TestClass]
     public class Dispecerat
     {
+        //Tema se testeaza ca ISursaDeDate se apeleaza cu Add(person),
+        //person fiind instanta returnata de PersonInitialization
+
+        [TestMethod]
+        public void GivenADispecerAWhenCallAddPersonThenAddIsCalledWithTheReturnedValuedOfPersonInitialization()
+        {
+            //arange
+            var sursaDeDateMock = new Mock<ISursaDeDate>();
+            var personInitMock = new Mock<IPersonInitialization>();
+            var person = new Persoana()
+            {
+                Nume = "Nume Mock",
+                Prenume = "Prenume Mock",
+                Varsta = 22
+            };
+
+            //setare pe mock
+            personInitMock.Setup(s => s.CreatePerson()).Returns(person);
+
+            DispecerA A = new DispecerA(sursaDeDateMock.Object, personInitMock.Object);
+
+            //act
+            A.Add();
+
+            //assert
+            sursaDeDateMock.Verify(v => v.Add(person), Times.Exactly(1));
+        }
+
+
         //Tema se apeleaza ReadByName by Mock
 
         [TestMethod]
