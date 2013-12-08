@@ -28,9 +28,16 @@ namespace InversionOfControlExample
             var person = personInitialization.CreatePerson();
 
             if (person.Varsta < 18)
+            {
                 throw new Exception("Varsta este sub 18 ani !");
+            }
 
-            sursaDeDate.Add(personInitialization.CreatePerson());
+            if (String.IsNullOrEmpty(person.Nume) || String.IsNullOrEmpty(person.Prenume))
+            {
+                throw new Exception("Numele sau prenumele este null sau empty!");
+            }
+
+            sursaDeDate.Add(person);
         }
 
         public IList<Persoana> ReadAll() 

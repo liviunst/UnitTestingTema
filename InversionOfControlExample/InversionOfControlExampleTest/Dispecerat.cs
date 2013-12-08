@@ -12,8 +12,90 @@ namespace InversionOfControlExampleTest
     [TestClass]
     public class Dispecerat
     {
+        //Tema se apeleaza ReadByName by Mock
+
         [TestMethod]
-        public void GivenADispeceratWhenCallAddPersonThenTheMethodAddFromISursaDeDateIsCalled()
+        public void GivenADispecerAWhenCallReadByNameTheMethodReadByNameFromIsursaDeDateIsCalled()
+        {
+            //arrange
+            var sursaDeDateMock = new Mock<ISursaDeDate>();
+            var personInitMock = new Mock<PersonInitialization>();
+
+            DispecerA A = new DispecerA(sursaDeDateMock.Object, personInitMock.Object);
+
+            A.ReadByNume("Liviu");
+
+            sursaDeDateMock.Verify(v => v.ReadByName("Liviu"), Times.Exactly(1));
+        }
+
+        //Tema se apeleaza ReadAll by Mock
+
+        [TestMethod]
+        public void GivenADispecerAWhenCalledReadAllTheMethodReadAllFromISursaDeDateIsCalled()
+        {
+            //arrange
+            var sursaDeDateMock = new Mock<ISursaDeDate>();
+            var personInitMock = new Mock<PersonInitialization>();
+
+            DispecerA A = new DispecerA(sursaDeDateMock.Object, personInitMock.Object);
+
+            A.ReadAll();
+            A.ReadAll();
+            A.ReadAll();
+
+            sursaDeDateMock.Verify(v => v.ReadAll(), Times.Exactly(3));
+        }
+
+        //Tema PersonInitialization returneaza o persoana cu nume null/empty => exceptie
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void GivenADispecerAWhenCallAddPersonAndPersonHasNumeEmptyOrNullThenAnExceptionIsThrown()
+        {
+            //arange
+            var sursaDeDateMock = new Mock<ISursaDeDate>();
+            var personInitMock = new Mock<IPersonInitialization>();
+
+            //setare pe mock
+            personInitMock.Setup(s => s.CreatePerson()).Returns(new Persoana()
+            {
+                Nume = null,
+                Prenume = "PrenumeMock",
+                Varsta = 17
+            });
+
+            DispecerA A = new DispecerA(sursaDeDateMock.Object, personInitMock.Object);
+
+            //act
+            A.Add();
+        }
+
+        //Tema PersonInitialization returneaza o persoana cu prenume null/empty => exceptie
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void GivenADispecerAWhenCallAddPersonAndPersonHasPrenumeEmptyOrNullThenAnExceptionIsThrown()
+        {
+            //arange
+            var sursaDeDateMock = new Mock<ISursaDeDate>();
+            var personInitMock = new Mock<IPersonInitialization>();
+
+            //setare pe mock
+            personInitMock.Setup(s => s.CreatePerson()).Returns(new Persoana()
+            {
+                Nume = "Nume Mock",
+                Prenume = "",
+                Varsta = 17
+            });
+
+            DispecerA A = new DispecerA(sursaDeDateMock.Object, personInitMock.Object);
+
+            //act
+            A.Add();
+        }
+
+        [TestMethod]
+        public void GivenADispecerAWhenCallAddPersonThenTheMethodAddFromISursaDeDateIsCalled()
         {
             //arange
             var sursaDeDateMock = new Mock<ISursaDeDate>();
@@ -21,19 +103,27 @@ namespace InversionOfControlExampleTest
 
             DispecerA A = new DispecerA(sursaDeDateMock.Object, personInitMock.Object);
 
+            //setare pe Mock
+            personInitMock.Setup(s => s.CreatePerson()).Returns(new Persoana()
+            {
+                Nume = "Nume Mock",
+                Prenume = "Prenume Mock",
+                Varsta = 23
+            });
+
             //act
             A.Add();
             A.Add();
 
             //assert
             sursaDeDateMock.Verify(v => v.Add(It.IsAny<Persoana>()), Times.Exactly(2));
-            personInitMock.Verify(v => v.CreatePerson(), Times.Exactly(0));
+            personInitMock.Verify(v => v.CreatePerson(), Times.Exactly(2));
 
         }
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
-        public void GivenADispeceratWhenCallAddPersonAndPersonHasVarstaLessThan18ThenAnExceptionIsThrown()
+        public void GivenADispecerAWhenCallAddPersonAndPersonHasVarstaLessThan18ThenAnExceptionIsThrown()
         {
             //arange
             var sursaDeDateMock = new Mock<ISursaDeDate>();
